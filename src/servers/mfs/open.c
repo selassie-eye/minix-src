@@ -287,9 +287,9 @@ static struct inode *new_node(struct inode *ldirp,
 	 * no directory entry is much better than the opposite.
 	 */
 	rip->i_nlinks++;
-	rip->i_zone[0] = z0;		/* major/minor device numbers */
-	rip->i_zone[9] = 0;			/* Initialization of classification value */
-	rw_inode(rip, WRITING);		/* force inode to disk now */
+	rip->i_zone[0] = z0;							/* major/minor device numbers */
+	rip->i_zone[9] = 0x7FFFFFFF;			/* Initialization of class value to highest int possible */
+	rw_inode(rip, WRITING);						/* force inode to disk now */
 
 	/* New inode acquired.  Try to make directory entry. */
 	if((r=search_dir(ldirp, string, &rip->i_num, ENTER, IGN_PERM)) != OK) {

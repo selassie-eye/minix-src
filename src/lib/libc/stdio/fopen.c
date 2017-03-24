@@ -102,6 +102,9 @@ fopen(const char *file, const char *mode)
 	int current_pid = getpid();
 	int current_tag = get_tag(current_pid);
 	int currclass = get_class(fp);
+	if(currclass == 0x7FFFFFFF){
+		set_class(fp, current_tag);
+	}
 
 	if(mode[1] == '+')
 	{
@@ -117,7 +120,7 @@ fopen(const char *file, const char *mode)
 	}
 	if(mode[0] == 'w' || mode[0] == 'a')
 	{
-		if(current_tag<= currclass)
+		if(current_tag <= currclass)
 			goto end;
 		goto release;
 	}
