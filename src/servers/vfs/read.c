@@ -343,7 +343,7 @@ size_t req_size;
 		errno = 1;
 		return -1;
 	}
-	if(decision==0)
+	if(dec == 0)
   {
 		currentFile=get_filp(fileD, VNODE_READ);
 	}
@@ -351,7 +351,7 @@ size_t req_size;
   {
 		currentFile=get_filp(fileD,VNODE_WRITE);
 	}
-  
+
 	struct vnode* vn = currentFile->filp_vno;
 	int r = req_do_class(vn->v_fs_e, vn->v_inode_nr, dec, val);
 	unlock_filp(currentFile);
