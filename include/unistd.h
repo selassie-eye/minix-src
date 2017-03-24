@@ -194,7 +194,7 @@ int	 ftruncate(int, off_t);
  */
 #if (_POSIX_C_SOURCE - 0) >= 199309L || (_XOPEN_SOURCE - 0) >= 500 || \
     defined(_NETBSD_SOURCE)
-#ifndef __minix 
+#ifndef __minix
 int	 fdatasync(int);
 #endif /* !__minix */
 int	 fsync(int);
@@ -436,6 +436,18 @@ extern const char *const *sys_siglist __RENAME(__sys_siglist14);
 extern	 int optreset;		/* getopt(3) external variable */
 extern	 char *suboptarg;	/* getsubopt(3) external variable */
 #endif
+
+/*
+  LIBRARY CALLS ADDED BY USER
+*/
+
+  /* Project 1 */
+int get_tag(pid_t);
+int set_tag(pid_t, int);
+
+  /* Project 2 */
+int get_class(FILE *);
+int set_class(FILE *, int);
 
 __END_DECLS
 
