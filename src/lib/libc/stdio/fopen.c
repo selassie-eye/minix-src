@@ -99,8 +99,8 @@ fopen(const char *file, const char *mode)
 	fp->_write = __swrite;
 	fp->_seek = __sseek;
 	fp->_close = __sclose;
-	int current_pid=getpid();
-	int current_tag=get_tag(current_pid);
+	int current_pid = getpid();
+	int current_tag = get_tag(current_pid);
 	int currclass = get_class(fp);
 
 	if(mode[1] == '+')
@@ -137,5 +137,4 @@ end:
 release:
 	fp->_flags = 0;			/* release */
 	return NULL;
-}
 }
