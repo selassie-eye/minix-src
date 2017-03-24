@@ -12,6 +12,6 @@ int get_class(FILE* fd){
 	m.m1_i1=fileno(fd);
 	m.m1_i2=0;
 	m.m1_i3=0;
-	
-	return _syscall(VFS_PROC_NR,DO_CLASS,&m);
+
+	return _syscall(VFS_PROC_NR, CLASS, &m);
 }

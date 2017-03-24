@@ -45,7 +45,8 @@ int (*fs_call_vec[])(message *fs_m_in, message *fs_m_out) = {
         fs_newnode,	    /* 29  */
         no_sys,	            /* 30  */
         no_sys,	            /* 31  */
-	no_sys,             /* 32 */
+	      no_sys,             /* 32 */
+  no_sys,                   /* 33 */
 };
 
 /* Device Handlers (/dev/uds) */

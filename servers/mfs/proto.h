@@ -9,7 +9,7 @@
 
 /* Structs used in prototypes must be declared as such first. */
 struct buf;
-struct filp;		
+struct filp;
 struct inode;
 struct super_block;
 
@@ -41,6 +41,7 @@ int truncate_inode(struct inode *rip, off_t len);
 int fs_flush(void);
 int fs_sync(void);
 int fs_new_driver(void);
+int fs_class(void);
 
 /* mount.c */
 int fs_mountpoint(void);
@@ -113,4 +114,3 @@ void zero_block(struct buf *bp);
 int write_map(struct inode *, off_t, zone_t, int);
 
 #endif
-

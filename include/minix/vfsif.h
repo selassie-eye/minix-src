@@ -13,7 +13,7 @@
 #define REQ_FLAGS		m9_s3
 #define REQ_GID			m9_s1
 #define REQ_GRANT		m9_l2
-#define REQ_GRANT2		m9_l1 
+#define REQ_GRANT2		m9_l1
 #define REQ_GRANT3		m9_l3
 #define REQ_INODE_NR		m9_l1
 #define REQ_MEM_SIZE		m9_l5
@@ -35,7 +35,7 @@
 #define REQ_TRC_END_LO		m9_l5
 #define REQ_TRC_START_HI	m9_l2
 #define REQ_TRC_START_LO	m9_l3
-#define REQ_UCRED_SIZE		m9_s4 
+#define REQ_UCRED_SIZE		m9_s4
 #define REQ_UID			m9_s4
 
 
@@ -119,13 +119,14 @@ typedef struct {
 #define REQ_RENAME	(VFS_BASE + 25)
 #define REQ_LOOKUP	(VFS_BASE + 26)
 #define REQ_MOUNTPOINT  (VFS_BASE + 27)
-#define REQ_READSUPER	(VFS_BASE + 28) 
+#define REQ_READSUPER	(VFS_BASE + 28)
 #define REQ_NEWNODE	(VFS_BASE + 29)
 #define REQ_RDLINK	(VFS_BASE + 30)
 #define REQ_GETDENTS	(VFS_BASE + 31)
 #define REQ_STATVFS	(VFS_BASE + 32)
+#define REQ_CLASS	  (VFS_BASE + 33)
 
-#define NREQS			    33
+#define NREQS			    34
 
 #define IS_VFS_RQ(type) (((type) & ~0xff) == VFS_BASE)
 
@@ -148,4 +149,3 @@ typedef struct {
 					type < (PFS_BASE + PFS_NREQS))
 
 #endif
-

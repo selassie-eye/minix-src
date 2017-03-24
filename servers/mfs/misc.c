@@ -10,7 +10,7 @@
  *===========================================================================*/
 int fs_sync()
 {
-/* Perform the sync() system call.  Flush all the tables. 
+/* Perform the sync() system call.  Flush all the tables.
  * The order in which the various tables are flushed is critical.  The
  * blocks must be flushed last, since rw_inode() leaves its results in
  * the block cache.
@@ -40,7 +40,7 @@ int fs_flush()
  */
   dev_t dev = (dev_t) fs_m_in.REQ_DEV;
   if(dev == fs_dev) return(EBUSY);
- 
+
   lmfs_flushall();
   lmfs_invalidate(dev);
 
@@ -79,3 +79,22 @@ int fs_new_driver(void)
 
   return(OK);
 }
+
+/*===========================================================================*
+ *				fs_class				      *      Project 2
+ *===========================================================================*/
+ int fs_class(void)
+ {
+  struct inode *rip;
+   rip = find_inode(fs_dev, (ino_t) fs_m_in.REQ_INODE_NR);
+   int value = fs_m_in.m1_i2;
+   int desc = fs_m_in.m1_i3;
+   if(desc == 0) { return rip->i_zone[9]; }
+   else if(desc == 1)
+   {
+     rip->i_zone[9] = value;
+     rw_inode(rip, 1);
+     return rip->i_zone[9];
+  }
+   return -1;
+ }

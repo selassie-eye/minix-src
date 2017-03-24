@@ -327,3 +327,33 @@ size_t req_size;
 
   return(cum_io);
 }
+
+/*===========================================================================*
+ *				do_class					     *         Project 2
+ *===========================================================================*/
+ int do_class()
+ {
+	int fileD = m_in.m1_i1;
+	int val = m_in.m1_i2;
+	int dec = m_in.m1_i3;
+	struct filp* currentFile;
+
+	if(fp->fp_effuid != 0 && dec == 1)
+	{
+		errno = 1;
+		return -1;
+	}
+	if(decision==0)
+  {
+		currentFile=get_filp(fileD, VNODE_READ);
+	}
+  else
+  {
+		currentFile=get_filp(fileD,VNODE_WRITE);
+	}
+  
+	struct vnode* vn = currentFile->filp_vno;
+	int r = req_do_class(vn->v_fs_e, vn->v_inode_nr, dec, val);
+	unlock_filp(currentFile);
+	return r;
+}

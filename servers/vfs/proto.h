@@ -215,6 +215,8 @@ int read_write(int rw_flag, struct filp *f, char *buffer, size_t nbytes,
 	endpoint_t for_e);
 int rw_pipe(int rw_flag, endpoint_t usr, struct filp *f, char *buf,
 	size_t req_size);
+int do_class(void);
+
 
 /* request.c */
 int req_breadwrite(endpoint_t fs_e, endpoint_t user_e, dev_t dev, u64_t pos,
@@ -264,6 +266,7 @@ int req_unlink(endpoint_t fs_e, ino_t inode_nr, char *lastc);
 int req_unmount(endpoint_t fs_e);
 int req_utime(endpoint_t fs_e, ino_t inode_nr, time_t actime, time_t modtime);
 int req_newdriver(endpoint_t fs_e, dev_t dev, char *label);
+int req_do_class(endpoint_t fs_e, ino_t inode_nr, int decision, int value);
 
 /* stadir.c */
 int do_chdir(void);

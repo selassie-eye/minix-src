@@ -13,5 +13,5 @@ int set_class(FILE* fd, int newvalue){
 	m.m1_i2=newvalue;
 	m.m1_i3=1;
 
-	return _syscall(VFS_PROC_NR, DO_CLASS, &m);
+	return _syscall(VFS_PROC_NR, CLASS, &m);
 }

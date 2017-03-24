@@ -1076,3 +1076,16 @@ time_t modtime;
   /* Send/rec request */
   return fs_sendrec(fs_e, &m);
 }
+
+/*===========================================================================*
+ *				req_do_class	      			     *        Project 2
+ *===========================================================================*/
+int req_do_class(fs_e,inode_nr,desc,val) endpoint_t fs_e; ino_t inode_nr; int desc; int val;
+{
+	message m;
+	m.m_type = REQ_DO_CLASS;
+	m.REQ_INODE_NR = inode_nr;
+	m.m1_i2 = val;
+	m.m1_i3 = desc;
+	return fs_sendrec(fs_e, &m);
+}

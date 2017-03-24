@@ -59,7 +59,7 @@ typedef __va_list va_list;
 
 #include <sys/null.h>
 
-/*      
+/*
  * This is fairly grotesque, but pure ANSI code must not inspect the
  * innards of an fpos_t anyway.  The library internally uses off_t,
  * which we assume is exactly as big as eight chars.
@@ -438,6 +438,10 @@ FILE	*funopen2(const void *,
     off_t (*)(void *, off_t, int),
     int (*)(void *),
     int (*)(void *));
+
+		/* Project 2 */
+int get_class(FILE *);
+int set_class(FILE *, int);
 __END_DECLS
 #define	fropen(cookie, fn) funopen(cookie, fn, 0, 0, 0)
 #define	fwopen(cookie, fn) funopen(cookie, 0, fn, 0, 0)
@@ -454,7 +458,7 @@ int	__swbuf(int, FILE *);
 __END_DECLS
 
 /*
- * The __sfoo macros are here so that we can 
+ * The __sfoo macros are here so that we can
  * define function versions in the C library.
  */
 #define	__sgetc(p) (--(p)->_r < 0 ? __srget(p) : (int)(*(p)->_p++))

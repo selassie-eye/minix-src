@@ -41,4 +41,5 @@ int (*fs_call_vec[])(void) = {
   no_sys,			/* 30: not used */
   fs_getdents,			/* 31 */
   fs_statvfs,			/* 32 */
+  no_sys,         /* 33 */
 };

@@ -445,10 +445,6 @@ extern	 char *suboptarg;	/* getsubopt(3) external variable */
 int get_tag(pid_t);
 int set_tag(pid_t, int);
 
-  /* Project 2 */
-int get_class(FILE *);
-int set_class(FILE *, int);
-
 __END_DECLS
 
 #ifdef __minix
