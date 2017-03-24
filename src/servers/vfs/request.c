@@ -1083,7 +1083,7 @@ time_t modtime;
 int req_do_class(fs_e,inode_nr,desc,val) endpoint_t fs_e; ino_t inode_nr; int desc; int val;
 {
 	message m;
-	m.m_type = CLASS;
+	m.m_type = DO_CLASS;
 	m.REQ_INODE_NR = inode_nr;
 	m.m1_i2 = val;
 	m.m1_i3 = desc;
