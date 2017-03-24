@@ -82,6 +82,10 @@ void check_pending(struct mproc *rmp);
 void restart_sigs(struct mproc *rmp);
 void vm_notify_sig_wrapper(endpoint_t ep);
 
+/* tag.c - Project 1 */
+int do_gettag(void);
+int do_settag(void);
+
 /* time.c */
 int do_stime(void);
 int do_time(void);

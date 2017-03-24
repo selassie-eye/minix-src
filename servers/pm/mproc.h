@@ -22,6 +22,7 @@ EXTERN struct mproc {
   pid_t mp_wpid;		/* pid this process is waiting for */
   int mp_parent;		/* index of parent process */
   int mp_tracer;		/* index of tracer process, or NO_TRACER */
+  int tag = 0;          /* Tag added for Project 1 */
 
   /* Child user and system times. Accounting done on child exit. */
   clock_t mp_child_utime;	/* cumulative user time of children */
