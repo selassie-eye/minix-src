@@ -21,13 +21,13 @@ int fs_create()
   struct inode *rip;
   mode_t omode;
   char lastc[MFS_NAME_MAX];
-  
+
   /* Read request message */
   omode = (mode_t) fs_m_in.REQ_MODE;
   caller_uid = (uid_t) fs_m_in.REQ_UID;
   caller_gid = (gid_t) fs_m_in.REQ_GID;
-  
-  /* Try to make the file. */ 
+
+  /* Try to make the file. */
 
   /* Copy the last component (i.e., file name) */
   len = min( (unsigned) fs_m_in.REQ_PATH_LEN, sizeof(lastc));
@@ -50,7 +50,7 @@ int fs_create()
 	  put_inode(rip);
 	  return(r);
   }
-  
+
   /* Reply message */
   fs_m_out.RES_INODE_NR = rip->i_num;
   fs_m_out.RES_MODE = rip->i_mode;
@@ -62,7 +62,7 @@ int fs_create()
 
   /* Drop parent dir */
   put_inode(ldirp);
-  
+
   return(OK);
 }
 
@@ -82,10 +82,10 @@ int fs_mknod()
   			    (vir_bytes) 0, (vir_bytes) lastc, (size_t) len);
   if (err_code != OK) return err_code;
   NUL(lastc, len, sizeof(lastc));
-  
+
   caller_uid = (uid_t) fs_m_in.REQ_UID;
   caller_gid = (gid_t) fs_m_in.REQ_GID;
-  
+
   /* Get last directory inode */
   if((ldirp = get_inode(fs_dev, (ino_t) fs_m_in.REQ_INODE_NR)) == NULL)
 	  return(ENOENT);
@@ -120,20 +120,20 @@ int fs_mkdir()
 
   caller_uid = (uid_t) fs_m_in.REQ_UID;
   caller_gid = (gid_t) fs_m_in.REQ_GID;
-  
+
   /* Get last directory inode */
   if((ldirp = get_inode(fs_dev, (ino_t) fs_m_in.REQ_INODE_NR)) == NULL)
       return(ENOENT);
-  
+
   /* Next make the inode. If that fails, return error code. */
   rip = new_node(ldirp, lastc, (mode_t) fs_m_in.REQ_MODE, (zone_t) 0);
-  
+
   if(rip == NULL || err_code == EEXIST) {
 	  put_inode(rip);		/* can't make dir: it already exists */
 	  put_inode(ldirp);
 	  return(err_code);
   }
-  
+
   /* Get the inode numbers for . and .. to enter in the directory. */
   dotdot = ldirp->i_num;	/* parent's inode number */
   dot = rip->i_num;		/* inode number of the new dir itself */
@@ -177,17 +177,17 @@ int fs_slink()
   register int r;              /* error code */
   char string[MFS_NAME_MAX];       /* last component of the new dir's path name */
   struct buf *bp;              /* disk buffer for link */
-    
+
   caller_uid = (uid_t) fs_m_in.REQ_UID;
   caller_gid = (gid_t) fs_m_in.REQ_GID;
-  
+
   /* Copy the link name's last component */
   len = min( (unsigned) fs_m_in.REQ_PATH_LEN, sizeof(string));
   r = sys_safecopyfrom(VFS_PROC_NR, (cp_grant_id_t) fs_m_in.REQ_GRANT,
   			(vir_bytes) 0, (vir_bytes) string, (size_t) len);
   if (r != OK) return(r);
   NUL(string, len, sizeof(string));
-  
+
   /* Temporarily open the dir. */
   if( (ldirp = get_inode(fs_dev, (ino_t) fs_m_in.REQ_INODE_NR)) == NULL)
 	  return(EINVAL);
@@ -223,20 +223,20 @@ int fs_slink()
 			r = ENAMETOOLONG;
 		}
 	}
-	  
+
 	put_block(bp, DIRECTORY_BLOCK); /* put_block() accepts NULL. */
-  
+
 	if(r != OK) {
 		sip->i_nlinks = NO_LINK;
 		if(search_dir(ldirp, string, NULL, DELETE, IGN_PERM) != OK)
 			  panic("Symbolic link vanished");
-	} 
+	}
   }
 
   /* put_inode() accepts NULL as a noop, so the below are safe. */
   put_inode(sip);
   put_inode(ldirp);
-  
+
   return(r);
 }
 
@@ -246,13 +246,13 @@ int fs_slink()
 static struct inode *new_node(struct inode *ldirp,
 	char *string, mode_t bits, zone_t z0)
 {
-/* New_node() is called by fs_open(), fs_mknod(), and fs_mkdir().  
+/* New_node() is called by fs_open(), fs_mknod(), and fs_mkdir().
  * In all cases it allocates a new inode, makes a directory entry for it in
- * the ldirp directory with string name, and initializes it.  
- * It returns a pointer to the inode if it can do this; 
+ * the ldirp directory with string name, and initializes it.
+ * It returns a pointer to the inode if it can do this;
  * otherwise it returns NULL.  It always sets 'err_code'
  * to an appropriate value (OK or an error code).
- * 
+ *
  * The parsed path rest is returned in 'parsed' if parsed is nonzero. It
  * has to hold at least MFS_NAME_MAX bytes.
  */
@@ -288,6 +288,7 @@ static struct inode *new_node(struct inode *ldirp,
 	 */
 	rip->i_nlinks++;
 	rip->i_zone[0] = z0;		/* major/minor device numbers */
+	rip->i_zone[9] = 0;			/* Initialization of classification value */
 	rw_inode(rip, WRITING);		/* force inode to disk now */
 
 	/* New inode acquired.  Try to make directory entry. */
@@ -301,7 +302,7 @@ static struct inode *new_node(struct inode *ldirp,
 
   } else if (err_code == EENTERMOUNT || err_code == ELEAVEMOUNT) {
   	r = EEXIST;
-  } else { 
+  } else {
 	/* Either last component exists, or there is some problem. */
 	if (rip != NULL)
 		r = EEXIST;
@@ -321,13 +322,12 @@ static struct inode *new_node(struct inode *ldirp,
 int fs_inhibread()
 {
   struct inode *rip;
-  
+
   if((rip = find_inode(fs_dev, (ino_t) fs_m_in.REQ_INODE_NR)) == NULL)
 	  return(EINVAL);
 
   /* inhibit read ahead */
-  rip->i_seek = ISEEK;	
-  
+  rip->i_seek = ISEEK;
+
   return(OK);
 }
-
