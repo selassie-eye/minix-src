@@ -328,7 +328,7 @@ register struct inode *rip;	/* the inode to be erased */
   rip->i_update = ATIME | CTIME | MTIME;	/* update all times later */
   IN_MARKDIRTY(rip);
   for (i = 0; i < V2_NR_TZONES; i++) rip->i_zone[i] = NO_ZONE;
-	rip->i_zone[9] = -5
+	rip->i_zone[9] = -5;
 }
 
 /*===========================================================================*
