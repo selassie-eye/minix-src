@@ -250,7 +250,7 @@ register struct inode *rip;	/* pointer to inode to be released */
 		TAILQ_INSERT_TAIL(&unused_inodes, rip, i_unused);
 	}
   }
-	rip->i_zone[9] = -5
+	rip->i_zone[9] = -5;
 }
 
 
