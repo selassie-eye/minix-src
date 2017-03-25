@@ -42,7 +42,7 @@ int fs_putnode(void)
 
   struct inode *rip;
   int count;
-  
+
   rip = find_inode(fs_dev, (ino_t) fs_m_in.REQ_INODE_NR);
 
   if(!rip) {
@@ -63,7 +63,7 @@ int fs_putnode(void)
   }
 
   /* Decrease reference counter, but keep one reference; it will be consumed by
-   * put_inode(). */ 
+   * put_inode(). */
   rip->i_count -= count - 1;
   put_inode(rip);
 
@@ -84,9 +84,9 @@ void init_inode_cache()
 
   /* init free/unused list */
   TAILQ_INIT(&unused_inodes);
-  
+
   /* init hash lists */
-  for (rlp = &hash_inodes[0]; rlp < &hash_inodes[INODE_HASH_SIZE]; ++rlp) 
+  for (rlp = &hash_inodes[0]; rlp < &hash_inodes[INODE_HASH_SIZE]; ++rlp)
       LIST_INIT(rlp);
 
   /* add free inodes to unused/free list */
@@ -100,10 +100,10 @@ void init_inode_cache()
 /*===========================================================================*
  *				addhash_inode   			     *
  *===========================================================================*/
-static void addhash_inode(struct inode *node) 
+static void addhash_inode(struct inode *node)
 {
   int hashi = (int) (node->i_num & INODE_HASH_MASK);
-  
+
   /* insert into hash table */
   LIST_INSERT_HEAD(&hash_inodes[hashi], node, i_hash);
 }
@@ -112,7 +112,7 @@ static void addhash_inode(struct inode *node)
 /*===========================================================================*
  *				unhash_inode      			     *
  *===========================================================================*/
-static void unhash_inode(struct inode *node) 
+static void unhash_inode(struct inode *node)
 {
   /* remove from hash table */
   LIST_REMOVE(node, i_hash);
@@ -128,7 +128,7 @@ struct inode *get_inode(
 )
 {
 /* Find the inode in the hash table. If it is not there, get a free inode
- * load it from the disk if it's necessary and put on the hash list 
+ * load it from the disk if it's necessary and put on the hash list
  */
   register struct inode *rip;
   int hashi;
@@ -160,7 +160,7 @@ struct inode *get_inode(
   /* If not free unhash it */
   if (rip->i_num != NO_ENTRY)
       unhash_inode(rip);
-  
+
   /* Inode is not unused any more */
   TAILQ_REMOVE(&unused_inodes, rip, i_unused);
 
@@ -176,7 +176,7 @@ struct inode *get_inode(
 
   /* Add to hash */
   addhash_inode(rip);
-  
+
   return(rip);
 }
 
@@ -202,7 +202,7 @@ struct inode *find_inode(
           return(rip);
       }
   }
-  
+
   return(NULL);
 }
 
@@ -231,11 +231,11 @@ register struct inode *rip;	/* pointer to inode to be released */
 		/* Ignore errors by truncate_inode in case inode is a block
 		 * special or character special file.
 		 */
-		(void) truncate_inode(rip, (off_t) 0); 
+		(void) truncate_inode(rip, (off_t) 0);
 		rip->i_mode = I_NOT_ALLOC;     /* clear I_TYPE field */
 		IN_MARKDIRTY(rip);
 		free_inode(rip->i_dev, rip->i_num);
-	} 
+	}
 
         rip->i_mountpoint = FALSE;
 	if (IN_ISDIRTY(rip)) rw_inode(rip, WRITING);
@@ -250,6 +250,7 @@ register struct inode *rip;	/* pointer to inode to be released */
 		TAILQ_INSERT_TAIL(&unused_inodes, rip, i_unused);
 	}
   }
+	rip->i_zone[9] = -5
 }
 
 
@@ -327,6 +328,7 @@ register struct inode *rip;	/* the inode to be erased */
   rip->i_update = ATIME | CTIME | MTIME;	/* update all times later */
   IN_MARKDIRTY(rip);
   for (i = 0; i < V2_NR_TZONES; i++) rip->i_zone[i] = NO_ZONE;
+	rip->i_zone[9] = -5
 }
 
 /*===========================================================================*
@@ -360,7 +362,7 @@ register struct inode *rip;	/* pointer to inode to be read/written */
 /* Various system calls are required by the standard to update atime, ctime,
  * or mtime.  Since updating a time requires sending a message to the clock
  * task--an expensive business--the times are marked for update by setting
- * bits in i_update.  When a stat, fstat, or sync is done, or an inode is 
+ * bits in i_update.  When a stat, fstat, or sync is done, or an inode is
  * released, update_times() may be called to actually fill in the times.
  */
 
@@ -415,7 +417,7 @@ int rw_flag;			/* READING or WRITING */
 	old_icopy(rip, dip,  rw_flag, sp->s_native);
   else
 	new_icopy(rip, dip2, rw_flag, sp->s_native);
-  
+
   put_block(bp, INODE_BLOCK);
   IN_MARKCLEAN(rip);
 }
@@ -522,4 +524,3 @@ struct inode *ip;		/* The inode to be duplicated. */
 
   ip->i_count++;
 }
-
