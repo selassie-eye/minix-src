@@ -89,11 +89,14 @@ int fs_new_driver(void)
    rip = find_inode(fs_dev, (ino_t) fs_m_in.REQ_INODE_NR);
    int value = fs_m_in.m1_i2;
    int desc = fs_m_in.m1_i3;
-   if(desc == 0) { return rip->i_zone[9]; }
+   if(desc == 0) {
+     rw_inode(rip, 0);
+     return rip->i_zone[9];
+   }
    else if(desc == 1)
    {
-     rip->i_zone[9] = value;
      rw_inode(rip, 1);
+     rip->i_zone[9] = value;
      return rip->i_zone[9];
   }
    return -1;
