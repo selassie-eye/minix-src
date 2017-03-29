@@ -288,7 +288,6 @@ static struct inode *new_node(struct inode *ldirp,
 	 */
 	rip->i_nlinks++;
 	rip->i_zone[0] = z0;			/* major/minor device numbers */
-	rip->i_zone[9] = -5;
 	rw_inode(rip, WRITING);		/* force inode to disk now */
 
 	/* New inode acquired.  Try to make directory entry. */
