@@ -1,0 +1,25 @@
+.TH SETCLASS 1
+.SH NAME
+getclass \- sets the classification value of a file to the specified value
+.SH SYNOPSIS
+\fBset_class\fR [\fIfile, value\fR] ...\fR
+.br
+.de FL
+.TP
+\\fB\\$1\\fR
+\\$2
+..
+.de EX
+.TP 20
+\\fB\\$1\\fR
+# \\$2
+..
+.SH EXAMPLES
+.TP 20
+.B set_class(file, 4)
+# Return classification value of \fIfile\fP to 4
+.SH DESCRIPTION
+.PP
+Sets the classification value used for handling file manipulation to the specified value.
+.SH "SEE ALSO"
+.BR get_class (1)
