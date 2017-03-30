@@ -99,43 +99,51 @@ fopen(const char *file, const char *mode)
 	fp->_write = __swrite;
 	fp->_seek = __sseek;
 	fp->_close = __sclose;
-	int current_pid = getpid();
-	int current_tag = get_tag(current_pid);
+
+	int current_pid=getpid();
+	int current_tag=get_tag(current_pid);
+	if(mode[0] == 'w' || mode[0] == 'a')
+	{
+			get_dirty(fp, current_tag);
+	}
+
 	int currclass = get_class(fp);
-	if(currclass == -5){ set_class(fp, current_tag); }
 
 	if(mode[1] == '+')
 	{
 			if(currclass == current_tag)
+			{
 				goto end;
+			}
+
 			goto release;
 	}
+
 	if(mode[0] == 'r')
 	{
 		if(current_tag >= currclass)
+		{
 			goto end;
-		goto release;
-	}
-	if(mode[0] == 'w' || mode[0] == 'a')
-	{
-		if(current_tag <= currclass)
-			goto end;
+		}
+
 		goto release;
 	}
 
-	/*
-	 * When opening in append mode, even though we use O_APPEND,
-	 * we need to seek to the end so that ftell() gets the right
-	 * answer.  If the user then alters the seek pointer, or
-	 * the file extends, this will fail, but there is not much
-	 * we can do about this.  (We could set __SAPP and check in
-	 * fseek and ftell.)
-	 */
-end:
-	if (oflags & O_APPEND)
-	(void) __sseek((void *)fp, (off_t)0, SEEK_END);
-	return fp;
-release:
-	fp->_flags = 0;			/* release */
-	return NULL;
-}
+	if(mode[0] == 'w' || mode[0] == 'a')
+	{
+		if(current_tag<= currclass)
+		{
+			goto end;
+		}
+
+		goto release;
+	}
+
+	end:
+		if (oflags & O_APPEND)
+		(void) __sseek((void *)fp, (off_t)0, SEEK_END);
+		return fp;
+	release:
+		fp->_flags = 0;			/* release */
+		return NULL;
+	}

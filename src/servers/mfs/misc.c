@@ -85,19 +85,29 @@ int fs_new_driver(void)
  *===========================================================================*/
  int fs_class(void)
  {
-  struct inode *rip;
-   rip = find_inode(fs_dev, (ino_t) fs_m_in.REQ_INODE_NR);
-   int value = fs_m_in.m1_i2;
-   int desc = fs_m_in.m1_i3;
-   if(desc == 0) {
-     rw_inode(rip, 0);
-     return rip->i_zone[9];
-   }
-   else if(desc == 1)
-   {
-     rw_inode(rip, 1);
-     rip->i_zone[9] = value;
-     return rip->i_zone[9];
+   struct inode *rip;
+   	rip = find_inode(fs_dev, (ino_t) fs_m_in.REQ_INODE_NR);
+   	int value = fs_m_in.m1_i2;
+   	int decision = fs_m_in.m1_i3;
+   	if(decision == 0)
+   	{
+   		return rip->i_zone[9];
+   	}
+   	else if(decision == 2)
+   	{
+   		if(rip->i_ctime != 10)
+   		{
+   			rip->i_ctime = 10;
+   			rip->i_zone[9] = value;
+   			rw_inode(rip, 1);
+   			return rip->i_zone[9];
+   		}
+   	}
+   	else
+   	{
+   		rip->i_zone[9] = value;
+   		rw_inode(rip, 1);
+   		return rip->i_zone[9];
+   	}
+   	return -1;
   }
-   return -1;
- }

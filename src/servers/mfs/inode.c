@@ -298,7 +298,7 @@ struct inode *alloc_inode(dev_t dev, mode_t bits)
 	rip->i_nindirs = sp->s_nindirs;	/* number of indirect zones per blk*/
 	rip->i_sp = sp;			/* pointer to super block */
 	rip->i_zone[9] = -5;
-	
+
 	/* Fields not cleared already are cleared in wipe_inode().  They have
 	 * been put there because truncate() needs to clear the same fields if
 	 * the file happens to be open while being truncated.  It saves space
@@ -322,10 +322,11 @@ register struct inode *rip;	/* the inode to be erased */
  * inode is to be truncated.
  */
 
+ 	rip->i_ctime = 0;
   register int i;
 
   rip->i_size = 0;
-  rip->i_update = ATIME | CTIME | MTIME;	/* update all times later */
+  rip->i_update = ATIME | CTIME | MTIME;		/* update all times later */
   IN_MARKDIRTY(rip);
   for (i = 0; i < V2_NR_TZONES; i++) rip->i_zone[i] = NO_ZONE;
 	rip->i_zone[9] = -5;
@@ -374,7 +375,7 @@ register struct inode *rip;	/* pointer to inode to be read/written */
 
   cur_time = clock_time();
   if (rip->i_update & ATIME) rip->i_atime = cur_time;
-  if (rip->i_update & CTIME) rip->i_ctime = cur_time;
+  // if (rip->i_update & CTIME) rip->i_ctime = cur_time;
   if (rip->i_update & MTIME) rip->i_mtime = cur_time;
   rip->i_update = 0;		/* they are all up-to-date now */
 }
